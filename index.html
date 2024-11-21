@@ -1,7 +1,7 @@
 <html>
 <head>
     <base href="https://www.example.com">
-    <title>Number Addition App with API Guide and PowerShell Integration </title>
+    <title>Number Addition App with API Guide and PowerShell Integration</title>
     <meta charset="UTF-8">
     <style>
         body {
@@ -115,6 +115,19 @@ Write-Host "API Result: $($response.Content)"
     </div>
 
     <script>
+        // Extract query parameters
+        const params = new URLSearchParams(window.location.search);
+        const num1 = parseFloat(params.get('num1'));
+        const num2 = parseFloat(params.get('num2'));
+
+        // Perform addition and display the result if parameters are valid
+        if (!isNaN(num1) && !isNaN(num2)) {
+            const result = num1 + num2;
+            document.getElementById('result').innerText = `Result: ${result}`;
+        } else {
+            document.getElementById('result').innerText = 'Invalid input!';
+        }
+
         function addNumbers() {
             const num1 = parseFloat(document.getElementById('num1').value);
             const num2 = parseFloat(document.getElementById('num2').value);
