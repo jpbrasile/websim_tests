@@ -1,0 +1,151 @@
+<html>
+<head>
+    <base href="https://www.example.com">
+    <title>Number Addition App with API Guide and PowerShell Integration</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+        }
+        input {
+            margin: 10px;
+            padding: 5px;
+            width: 200px;
+        }
+        button {
+            margin: 10px;
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #result {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+        .guide {
+            text-align: left;
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Number Addition App</h1>
+        
+        <div class="guide">
+            <h3>App Guide:</h3>
+            <h4>Local Addition Method:</h4>
+            <ul>
+                <li>Enter two numbers in the input fields.</li>
+                <li>Click "Add Numbers" button.</li>
+                <li>Calculation happens directly on the webpage.</li>
+            </ul>
+
+            <h4>API Addition Method:</h4>
+            <ul>
+                <li>Enter two numbers in the input fields.</li>
+                <li>Click "Add via API" button.</li>
+                <li>Uses external Math.js API for calculation.</li>
+            </ul>
+
+            <h4>API Data Transmission Details:</h4>
+            <p>API Call Mechanism:
+                <ul>
+                    <li>Uses <code>fetch()</code> for API request.</li>
+                    <li>Endpoint: <a href="https://api.mathjs.org/v4/" target="_blank">https://api.mathjs.org/v4/</a></li>
+                    <li>Query Parameter: <code>expr</code> with URL-encoded addition.</li>
+                    <li>Example: <code>https://api.mathjs.org/v4/?expr=5%2B3</code></li>
+                </ul>
+            </p>
+
+            <h4>PowerShell API Interaction:</h4>
+            <p>You can use PowerShell to make similar API calls:</p>
+            <pre>
+# PowerShell API Call Example
+$num1 = 5
+$num2 = 3
+$url = "https://api.mathjs.org/v4/?expr=$num1%2B$num2"
+$response = Invoke-WebRequest -Uri $url
+Write-Host "API Result: $($response.Content)"
+            </pre>
+            <p>Commands explained:
+                <ul>
+                    <li><code>Invoke-WebRequest</code>: Makes HTTP requests.</li>
+                    <li><code>$url</code>: Constructs the API endpoint with numbers.</li>
+                    <li><code>%2B</code>: URL-encoded plus sign.</li>
+                    <li><code>$response.Content</code>: Retrieves API response.</li>
+                </ul>
+            </p>
+        </div>
+
+        <input type="number" id="num1" placeholder="Enter first number">
+        <input type="number" id="num2" placeholder="Enter second number">
+        
+        <div>
+            <button onclick="addNumbers()">Add Numbers</button>
+            <button onclick="addViaAPI()">Add via API</button>
+        </div>
+        
+        <div id="result">Result: </div>
+    </div>
+
+    <script>
+        function addNumbers() {
+            const num1 = parseFloat(document.getElementById('num1').value);
+            const num2 = parseFloat(document.getElementById('num2').value);
+            
+            if (isNaN(num1) || isNaN(num2)) {
+                document.getElementById('result').innerText = 'Please enter valid numbers';
+                return;
+            }
+            
+            const sum = num1 + num2;
+            document.getElementById('result').innerText = `Result: ${num1} + ${num2} = ${sum}`;
+        }
+
+        async function addViaAPI() {
+            const num1 = parseFloat(document.getElementById('num1').value);
+            const num2 = parseFloat(document.getElementById('num2').value);
+            
+            if (isNaN(num1) || isNaN(num2)) {
+                document.getElementById('result').innerText = 'Please enter valid numbers';
+                return;
+            }
+
+            try {
+                const response = await fetch(`https://api.mathjs.org/v4/?expr=${num1}%2B${num2}`);
+                const result = await response.text();
+                document.getElementById('result').innerText = `API Result: ${num1} + ${num2} = ${result}`;
+            } catch (error) {
+                document.getElementById('result').innerText = 'API Error. Using local calculation.';
+                addNumbers();
+            }
+        }
+    </script>
+</body>
+</html>
